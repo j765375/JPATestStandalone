@@ -1,17 +1,18 @@
 package test.jpa.entity;
 
-import javax.persistence.Column;
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SecondaryTable;
-import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
-// NamedQueryはEntityに書く
-@NamedQuery(name="selectAll", query="select b from Book as b")
-public class Book {
+public class BookWithVersion {
+	private int id;
 
 	private String isbn;
 	
@@ -21,18 +22,19 @@ public class Book {
 	
 	private String publisher;
 
-	public Book() {
+	private int version;
+	
+	public BookWithVersion() {
 		this("isbn123456", "title1", "author1", "publisher1");
 	}
 	
-	public Book(String isbn, String title, String author, String publisher) {
+	public BookWithVersion(String isbn, String title, String author, String publisher) {
 		this.isbn = isbn;
 		this.title = title;
 		this.author = author;
 		this.publisher = publisher;
 	}
 
-	@Id
 	public String getIsbn() {
 		return isbn;
 	}
@@ -57,7 +59,6 @@ public class Book {
 		this.author = author;
 	}
 
-	@Column(length = 500)
 	public String getPublisher() {
 		return publisher;
 	}
@@ -66,10 +67,29 @@ public class Book {
 		this.publisher = publisher;
 	}
 
+	@Id
+	@GeneratedValue
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
-		return "Book [isbn=" + isbn + ", title=" + title
+		return "Book [id=" + id + ", isbn=" + isbn + ", title=" + title
 				+ ", author=" + author + ", publisher=" + publisher + "]";
+	}
+
+	@Version
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 	
 }

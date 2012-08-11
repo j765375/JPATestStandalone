@@ -9,9 +9,10 @@ import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
 @Entity
-// NamedQueryはEntityに書く
-@NamedQuery(name="selectAll", query="select b from Book as b")
-public class Book {
+@SecondaryTable(name="SUB")
+public class BookWithSubTable {
+
+	private int id;
 
 	private String isbn;
 	
@@ -21,18 +22,17 @@ public class Book {
 	
 	private String publisher;
 
-	public Book() {
+	public BookWithSubTable() {
 		this("isbn123456", "title1", "author1", "publisher1");
 	}
 	
-	public Book(String isbn, String title, String author, String publisher) {
+	public BookWithSubTable(String isbn, String title, String author, String publisher) {
 		this.isbn = isbn;
 		this.title = title;
 		this.author = author;
 		this.publisher = publisher;
 	}
 
-	@Id
 	public String getIsbn() {
 		return isbn;
 	}
@@ -49,6 +49,7 @@ public class Book {
 		this.title = title;
 	}
 
+	@Column(table="SUB")
 	public String getAuthor() {
 		return author;
 	}
@@ -66,9 +67,19 @@ public class Book {
 		this.publisher = publisher;
 	}
 
+	@Id
+	@GeneratedValue
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
-		return "Book [isbn=" + isbn + ", title=" + title
+		return "Book [id=" + id + ", isbn=" + isbn + ", title=" + title
 				+ ", author=" + author + ", publisher=" + publisher + "]";
 	}
 	

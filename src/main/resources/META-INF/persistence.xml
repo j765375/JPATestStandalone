@@ -14,13 +14,19 @@
 		<class>test.jpa.entity.onetoone.CustomerForTwoWay</class>
 		<class>test.jpa.entity.manytoone.Employee</class>
 		<class>test.jpa.entity.manytoone.Department</class>
+		<class>test.jpa.entity.BookWithId</class>
+		<class>test.jpa.entity.BookWithSubTable</class>
+		<class>test.jpa.entity.BookWithVersion</class>
+		<!-- 
+		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+		-->
 		<properties>
-			<!-- 
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
 			<property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527//Users/jkatada/derby_db/JPATest;create=true"/>
-			 -->
+			<!-- 
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:derby:/Users/jkatada/derby_db/JPATest;create=true"/>
+			 -->
 			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect"/>
 			<property name="hibernate.hbm2ddl.auto" value="update"/>
 			<property name="hibernate.show_sql" value="true" />
