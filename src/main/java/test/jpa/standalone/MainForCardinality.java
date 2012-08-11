@@ -26,9 +26,7 @@ public class MainForCardinality {
 		m.testManyToOne();
 	}
 	private void prepare() {
-		EntityManagerFactory emf = Persistence
-				.createEntityManagerFactory("JPATestStandalone");
-		em = emf.createEntityManager();
+		em = EntityManagerUtil.createEntityManager();
 	}
 	
 	private void testOneToOne() {

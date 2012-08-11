@@ -26,6 +26,7 @@ public class Book {
 	private String publisher;
 
 	public Book() {
+		this("isbn123456", "title1", "author1", "publisher1");
 	}
 	
 	public Book(String isbn, String title, String author, String publisher) {
@@ -70,13 +71,19 @@ public class Book {
 	}
 
 	@Id
-	@GeneratedValue
+	//@GeneratedValue
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", isbn=" + isbn + ", title=" + title
+				+ ", author=" + author + ", publisher=" + publisher + "]";
 	}
 	
 }

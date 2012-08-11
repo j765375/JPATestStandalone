@@ -24,9 +24,7 @@ public class MainForFetch {
 		m.testLazy();
 	}
 	private void prepare() {
-		EntityManagerFactory emf = Persistence
-				.createEntityManagerFactory("JPATestStandalone");
-		em = emf.createEntityManager();
+		em = EntityManagerUtil.createEntityManager();
 	}
 	
 	private void testLazy() {
