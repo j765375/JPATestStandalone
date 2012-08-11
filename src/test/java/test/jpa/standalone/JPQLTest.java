@@ -36,8 +36,8 @@ public class JPQLTest {
 
 		tx.begin();
 		// 集計関数countの使用例
-		Query countQuery = em.createQuery("select count(b) from BookWithId b");
-		long count = (long)countQuery.getSingleResult();
+		TypedQuery<Long> countQuery = em.createQuery("select count(b) from BookWithId b", Long.class);
+		long count = countQuery.getSingleResult();
 		// エントリが20以内だった場合、20まで増やす
 		if (count < 20) {
 			for (int i = 0; i < 20 - count; i++) {
@@ -55,9 +55,9 @@ public class JPQLTest {
 	@Test
 	public void testDynamicQuery() {
 		// 名前付きパラメータを利用した動的クエリの発行
-		Query q = em.createQuery("select b from BookWithId b where id = :bookId", BookWithId.class);
+		TypedQuery<BookWithId> q = em.createQuery("select b from BookWithId b where id = :bookId", BookWithId.class);
 		q.setParameter("bookId", 5);
-		BookWithId book = (BookWithId) q.getSingleResult();
+		BookWithId book = q.getSingleResult();
 		System.out.println(book);
 		assertThat(book.getId(), is(5));		
 	}
@@ -65,7 +65,7 @@ public class JPQLTest {
 	@Test
 	public void testDynamicQueryWithPaging() {
 		// ページングの例
-		Query pagingQuery = em.createQuery("select b from BookWithId b", BookWithId.class);
+		TypedQuery<BookWithId> pagingQuery = em.createQuery("select b from BookWithId b", BookWithId.class);
 		
 		final int MAX_OF_PAGE = 6;
 		pagingQuery.setMaxResults(MAX_OF_PAGE);
@@ -84,14 +84,14 @@ public class JPQLTest {
 	
 	@Test
 	public void testNamedQuery() {
-		Query q = em.createNamedQuery(BookWithId.FIND_ALL, BookWithId.class);
+		TypedQuery<BookWithId> q = em.createNamedQuery(BookWithId.FIND_ALL, BookWithId.class);
 		List<BookWithId> result = q.getResultList();
 		assertThat(result.size() >= 20, is(true));
 	}
 	
 	@Test
 	public void testNativeQuery() {
-		Query q = em.createNamedQuery(BookWithId.FIND_ALL_NATIVE, BookWithId.class);
+		TypedQuery<BookWithId> q = em.createNamedQuery(BookWithId.FIND_ALL_NATIVE, BookWithId.class);
 		List<BookWithId> bookList = q.getResultList();
 		printBooks(bookList);		
 	}
