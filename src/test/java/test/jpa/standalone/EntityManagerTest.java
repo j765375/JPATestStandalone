@@ -44,7 +44,9 @@ public class EntityManagerTest {
 
 	@After
 	public void tearDown() {
-		em.close();
+		if (em != null) {
+			em.close();
+		}
 	}
 
 	@Test(expected = EntityExistsException.class)
@@ -124,7 +126,7 @@ public class EntityManagerTest {
 	}
 
 	@Test
-	//@Ignore("複数同時実行させてロックの動きを確かめること")
+	@Ignore("複数同時実行させてロックの動きを確かめること")
 	public void testOptimisticLock() {
 		tx.begin();
 		BookWithVersion book = em.find(BookWithVersion.class, 1);
@@ -152,7 +154,7 @@ public class EntityManagerTest {
 	}
 
 	@Test
-	//@Ignore("複数同時実行させてロックの動きを確かめること")
+	@Ignore("複数同時実行させてロックの動きを確かめること")
 	public void testPesimisticLock() {
 		tx.begin();
 		Query q = em.createQuery("select b from BookWithId b where b.id = 1");

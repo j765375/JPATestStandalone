@@ -49,7 +49,9 @@ public class JPQLTest {
 
 	@After
 	public void tearDown() {
-		em.close();
+		if (em != null) {
+			em.close();
+		}
 	}
 
 	@Test
