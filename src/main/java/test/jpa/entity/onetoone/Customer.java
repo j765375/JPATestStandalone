@@ -1,5 +1,6 @@
 package test.jpa.entity.onetoone;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,7 +20,8 @@ public class Customer {
 	private String phoneNumber;
 	
 	// @OneToOne 一方向
-	@OneToOne(fetch = FetchType.LAZY) // デフォルトはEAGER
+	@OneToOne(fetch = FetchType.LAZY, // デフォルトはEAGER 
+			cascade = CascadeType.PERSIST) 
 	@JoinColumn(name = "add_fk", nullable = false)
 	private Address address;
 	
