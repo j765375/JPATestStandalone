@@ -92,6 +92,13 @@ public class JPQLTest {
 	}
 	
 	@Test
+	public void testNamedQueryOnXML() {
+		TypedQuery<BookWithId> q = em.createNamedQuery("BookWithId.findAllFromXML" ,BookWithId.class);
+		List<BookWithId> result = q.getResultList();
+		assertThat(result.size() >= 20, is(true));
+	}
+	
+	@Test
 	public void testNativeQuery() {
 		TypedQuery<BookWithId> q = em.createNamedQuery(BookWithId.FIND_ALL_NATIVE, BookWithId.class);
 		List<BookWithId> bookList = q.getResultList();
