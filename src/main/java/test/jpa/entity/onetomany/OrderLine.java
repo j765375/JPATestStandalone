@@ -13,6 +13,16 @@ public class OrderLine {
 	private String item;
 	private double unitPrice;
 	private int quantity;
+	
+	public OrderLine() {
+		this("item", 20.0, 10);
+	}
+	
+	public OrderLine(String item, double unitPrice, int quantity) {
+		this.item = item;
+		this.unitPrice = unitPrice;
+		this.quantity = quantity;
+	}
 	public long getId() {
 		return id;
 	}

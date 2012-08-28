@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import test.jpa.entity.onetomany.Order;
 import test.jpa.entity.onetoone.Address;
 import test.jpa.entity.onetoone.Customer;
 
@@ -36,6 +37,15 @@ public class NPlusOneSelectTest {
 		if (count < 20) {
 			for (int i = 0; i < 20 - count; i++) {
 				em.persist(new Customer(new Address()));
+			}
+		}
+		// 集計関数countの使用例
+		countQuery = em.createQuery("select count(o) from Order o", Long.class);
+		count = countQuery.getSingleResult();
+		// エントリが20以内だった場合、20まで増やす
+		if (count < 20) {
+			for (int i = 0; i < 20 - count; i++) {
+				em.persist(new Order());
 			}
 		}
 		tx.commit();
@@ -74,5 +84,18 @@ public class NPlusOneSelectTest {
 		}
 		
 		// SQL発行回数が1回であることをログで確認
+	}
+	
+	@Test
+	public void testNPlusOneForOneToMany() {
+		TypedQuery<Order> q = em.createQuery("SELECT o FROM Order o join fetch o.orderLines", Order.class);
+		List<Order> result = q.getResultList();
+		
+		System.out.println("get Order: " + result.size());
+		
+		for (Order order : result) {
+			System.out.println("orderLine num : " + order.getOrderLines().size());
+			System.out.println("orderLine2 num : " + order.getOrderLines2().size());
+		}
 	}
 }

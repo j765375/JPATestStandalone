@@ -16,6 +16,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.LockModeType;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.transaction.Transaction;
 
@@ -173,6 +174,42 @@ public class EntityManagerTest {
 			e.printStackTrace();
 			throw e;
 		}
+	}
+	
+	@Test
+	public void testMerge() {
+		tx.begin();
+		BookWithId book = em.find(BookWithId.class, 1);
+		if (book == null) {
+			book = new BookWithId();
+			em.persist(book);
+		}
+		book.setTitle("test");
+		tx.commit();
+		
+		System.out.println("contains book : " + em.contains(book));
+		
+		em.detach(book);
+		
+		tx.begin();
+		book.setTitle("testMerge");
+		
+		try {
+			// detachしたEntityをpersistしようとすると例外発生
+			em.persist(book);
+			fail();
+		} catch (PersistenceException e) {
+		}
+		tx.rollback();
+		
+		tx.begin();
+		
+		book.setTitle("testMerge2");
+		// マージすればOK
+		em.merge(book);
+		
+		tx.commit();
+		
 	}
 	
 	private void waitUserInput() {

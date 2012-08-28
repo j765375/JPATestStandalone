@@ -18,6 +18,20 @@ public class OrderLineForTwoWay {
 	@ManyToOne
 	private Order order;
 	
+	public OrderLineForTwoWay() {
+	}
+	
+	public OrderLineForTwoWay(Order order) {
+		this("itemTwoWay", 50.0, 100, order);
+	}
+	
+	public OrderLineForTwoWay(String item, double unitPrice,
+			int quantity, Order order) {
+		this.item = item;
+		this.unitPrice = unitPrice;
+		this.quantity = quantity;
+		this.order = order;
+	}
 	public long getId() {
 		return id;
 	}

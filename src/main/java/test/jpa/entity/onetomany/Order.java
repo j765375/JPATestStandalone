@@ -1,8 +1,10 @@
 package test.jpa.entity.onetomany;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,11 +23,23 @@ public class Order {
 	private long id;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date creationDate;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.PERSIST)
 	private List<OrderLine> orderLines;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.PERSIST)
 	private List<OrderLineForTwoWay> orderLines2;
-	
+
+	public Order() {
+		this.creationDate = new Date();
+		this.orderLines = new ArrayList<>();
+		orderLines.add(new OrderLine());
+		orderLines.add(new OrderLine());
+		orderLines.add(new OrderLine());
+		this.orderLines2 = new ArrayList<>();
+		orderLines2.add(new OrderLineForTwoWay(this));
+		orderLines2.add(new OrderLineForTwoWay(this));
+		orderLines2.add(new OrderLineForTwoWay(this));
+	}
+
 	public long getId() {
 		return id;
 	}
