@@ -41,7 +41,7 @@ public class BookWithId {
 	private String publisher;
 
 	public BookWithId() {
-		this("isbn123456", "title1", "author1", "publisher1");
+		this("isbn123456", "title1", "author1", "publisher" + ((int)(Math.random() * 3)));
 	}
 	
 	public BookWithId(String isbn, String title, String author, String publisher) {

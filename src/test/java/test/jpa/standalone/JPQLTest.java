@@ -1,13 +1,14 @@
 package test.jpa.standalone;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -19,6 +20,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import test.jpa.entity.Book;
 import test.jpa.entity.BookWithId;
 
 public class JPQLTest {
@@ -123,7 +125,83 @@ public class JPQLTest {
 		BookWithId normalResult = (BookWithId)normalQuery.getSingleResult();
 		System.out.println(normalResult);
 		assertThat(normalResult.getId(), is(3));
+	}
+	
+	@Test
+	public void testDelete() {
+		BookWithId add = new BookWithId();
+		tx.begin();
+		em.persist(add);
+		tx.commit();
 		
+		System.out.println("added book id is : " + add.getId());
+		
+		tx.begin();
+		int result = em.createQuery("DELETE FROM BookWithId b WHERE b.id = :id")
+			.setParameter("id", add.getId())
+			.executeUpdate();
+		tx.commit();
+		
+		assertThat(result, is(1));
+		
+		try {
+			BookWithId b = em.createQuery("SELECT b FROM BookWithId b WHERE b.id = :id", BookWithId.class)
+					.setParameter("id", add.getId())
+					.getSingleResult();
+			fail();
+		} catch(NoResultException e) {
+			System.out.println("delete success");
+		}
+	}
+	
+	@Test
+	public void testDynamicSelect() {
+		String baseQuery = "SELECT b FROM BookWithId b WHERE 1 = 1 ";
+		
+		BookWithId criteria = new BookWithId("", "title1", null, "publisher2");
+		String dynamicClause = "";
+		
+		boolean hasIsbn = !isEmpty(criteria.getIsbn());
+		boolean hasTitle = !isEmpty(criteria.getTitle());
+		boolean hasAuthor = !isEmpty(criteria.getAuthor());
+		boolean hasPublisher = !isEmpty(criteria.getPublisher());
+		
+		if (hasIsbn) {
+			dynamicClause += "AND b.isbn = :isbn ";
+		}
+		if (hasTitle) {
+			dynamicClause += "AND b.title = :title ";
+		}
+		if (hasAuthor) {
+			dynamicClause += "AND b.author = :author ";
+		}
+		if (hasPublisher) {
+			dynamicClause += "AND b.publisher = :publisher ";
+		}
+
+		System.out.println("Query : " + baseQuery + dynamicClause);
+		
+		TypedQuery<BookWithId> query = em.createQuery(baseQuery + dynamicClause, BookWithId.class);
+		
+		if (hasIsbn) {
+			query.setParameter("isbn", criteria.getIsbn());
+		}
+		if (hasTitle) {
+			query.setParameter("title", criteria.getTitle());
+		}
+		if (hasAuthor) {
+			query.setParameter("author", criteria.getAuthor());
+		}
+		if (hasPublisher) {
+			query.setParameter("publisher", criteria.getPublisher());
+		}
+		
+		List<BookWithId> result = query.getResultList();
+		printBooks(result);
+	}
+	
+	private boolean isEmpty(String str) {
+		return (str == null) || (str.length() == 0);
 	}
 	
 	private void printBooks(List<BookWithId> bookList) {
