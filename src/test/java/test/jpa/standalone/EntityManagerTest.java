@@ -1,6 +1,7 @@
 package test.jpa.standalone;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -8,20 +9,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import javax.management.RuntimeErrorException;
 import javax.persistence.Cache;
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.LockModeType;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-import javax.transaction.Transaction;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -29,26 +22,7 @@ import test.jpa.entity.Book;
 import test.jpa.entity.BookWithId;
 import test.jpa.entity.BookWithVersion;
 
-public class EntityManagerTest {
-
-	private EntityManagerFactory emf;
-	private EntityManager em;
-	private EntityTransaction tx;
-
-	@Before
-	public void setUp() {
-		emf = Persistence
-				.createEntityManagerFactory(EntityManagerUtil.UNIT_NAME);
-		em = emf.createEntityManager();
-		tx = em.getTransaction();
-	}
-
-	@After
-	public void tearDown() {
-		if (em != null) {
-			em.close();
-		}
-	}
+public class EntityManagerTest extends AbstractJPATest {
 
 	@Test(expected = EntityExistsException.class)
 	public void testDuplicateId() {

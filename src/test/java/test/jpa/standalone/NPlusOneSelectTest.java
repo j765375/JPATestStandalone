@@ -16,19 +16,10 @@ import test.jpa.entity.onetomany.Order;
 import test.jpa.entity.onetoone.Address;
 import test.jpa.entity.onetoone.Customer;
 
-public class NPlusOneSelectTest {
-
-	private EntityManagerFactory emf;
-	private EntityManager em;
-	private EntityTransaction tx;
+public class NPlusOneSelectTest extends AbstractJPATest {
 
 	@Before
 	public void setUp() {
-		emf = Persistence
-				.createEntityManagerFactory(EntityManagerUtil.UNIT_NAME);
-		em = emf.createEntityManager();
-		tx = em.getTransaction();
-
 		tx.begin();
 		// 集計関数countの使用例
 		TypedQuery<Long> countQuery = em.createQuery("select count(a) from Address a", Long.class);
@@ -49,13 +40,6 @@ public class NPlusOneSelectTest {
 			}
 		}
 		tx.commit();
-}
-
-	@After
-	public void tearDown() {
-		if (em != null) {
-			em.close();
-		}
 	}
 
 	@Test

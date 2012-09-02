@@ -15,9 +15,9 @@
 		<class>test.jpa.entity.onetoone.CustomerForTwoWay</class>
 		<class>test.jpa.entity.manytoone.Employee</class>
 		<class>test.jpa.entity.manytoone.Department</class>
-		<class>test.jpa.entity.BookWithId</class>
 		<class>test.jpa.entity.BookWithSubTable</class>
 		<class>test.jpa.entity.BookWithVersion</class>
+		<class>test.jpa.entity.NumberEntity</class>
 		<!-- 
 		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 		-->
